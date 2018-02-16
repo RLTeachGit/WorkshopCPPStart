@@ -2,7 +2,6 @@
 
 #include "PlayerCharacter.h"
 
-
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -32,12 +31,25 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::ForwardMove);
 	PlayerInputComponent->BindAxis("LookRight", this, &APlayerCharacter::TurnRight);
-	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::CameraUp);
 }
 
 void APlayerCharacter::StartJump()
 {
 	Jump();
+}
+
+float   Clamp(const float Number,const float Low, const float High)
+{
+    if(Number>High) return High;
+    else if(Number < Low) return Low;
+    return Number;
+}
+
+void    APlayerCharacter::CameraUp(float Speed)
+{
+    CamAngle= Clamp(CamAngle+Speed,-45.0f,45.0f);
+    RotateCamera(CamAngle);
 }
 
 void APlayerCharacter::ForwardMove(float Speed)

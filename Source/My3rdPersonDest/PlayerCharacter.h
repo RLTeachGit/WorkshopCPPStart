@@ -29,4 +29,12 @@ public:
 	void	StartJump();
 	void	ForwardMove(float Speed);
 	void	TurnRight(float Speed);
+    void    CameraUp(float Speed);
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
+    void    RotateCamera(float Angle);
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+    float     CamAngle=0.0f;
+    
+    
 };
