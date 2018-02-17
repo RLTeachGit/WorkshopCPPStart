@@ -14,7 +14,9 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    UCapsuleComponent *tCapsule = GetCapsuleComponent();
+
+    tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
 }
 
 // Called every frame
@@ -23,6 +25,27 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+
+void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+     UE_LOG(LogTemp, Warning, TEXT("Collision"));
+    // Other Actor is the actor that triggered the event. Check that is not ourself.
+    if ( (OtherActor != nullptr ) && (OtherActor != this) && ( OtherComp != nullptr ) )
+    {
+        APickup* tPickup=Cast<APickup>(OtherActor);
+        if(tPickup!=nullptr)
+        {
+            tPickup->PickedUp(this);
+        }
+    }
+}
+
+void APlayerCharacter::AddItem(UInventoryItem* InventoryItem)
+{
+    InventoryArray.Add(InventoryItem);
+}
+
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

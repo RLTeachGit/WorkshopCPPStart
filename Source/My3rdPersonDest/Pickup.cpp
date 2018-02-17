@@ -15,10 +15,23 @@ APickup::APickup()
 void APickup::BeginPlay()
 {
 	Super::BeginPlay();
+
+}
+
+void    APickup::PickedUp(APlayerCharacter* Player)
+{
     if(InventoryItemSelection!=nullptr)
     {
-        InventoryItem = NewObject<UInventoryItem>(this,InventoryItemSelection);
-        UE_LOG(LogTemp, Warning, TEXT("ID %d"), InventoryItem->GetID());
+        UInventoryItem* tItem = NewObject<UInventoryItem>(Player,InventoryItemSelection);
+        if(tItem!=nullptr)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("ID %d"), tItem->GetID());
+            Player->AddItem(tItem);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Could not create item"));
+        }
     }
 }
 

@@ -2,8 +2,15 @@
 
 #pragma once
 
+class   UInventoryItem;
+class   APlayerCharacter;
+
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Pickup.h"
+#include "InventoryItem.h"
+#include "Components/CapsuleComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -31,10 +38,19 @@ public:
 	void	TurnRight(float Speed);
     void    CameraUp(float Speed);
     
-    UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
+    UFUNCTION(BlueprintImplementableEvent, Category = Camera)
     void    RotateCamera(float Angle);
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
     float     CamAngle=0.0f;
     
+    UFUNCTION()
+    void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+    
+//Inventory
+    UPROPERTY(VisibleAnywhere, Instanced, BlueprintReadOnly, Category = Inventory)
+    TArray<UInventoryItem*> InventoryArray;
+    
+    void    AddItem(UInventoryItem* InventoryItem);
     
 };

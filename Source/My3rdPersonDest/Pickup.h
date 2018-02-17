@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "InventoryItem.h"
 #include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
+#include "PlayerCharacter.h"
 #include "Pickup.generated.h"
 
 UCLASS()
@@ -24,11 +25,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+    
+    virtual void PickedUp(APlayerCharacter* Player);
 
 
     UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)
     TSubclassOf<UInventoryItem> InventoryItemSelection;
-    
-    UInventoryItem* InventoryItem;
-	
 };
