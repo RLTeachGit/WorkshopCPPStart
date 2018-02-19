@@ -21,6 +21,7 @@ public:
 	virtual	bool	ItemStart(APlayerCharacter* Player);
 	virtual	void	ItemTick(APlayerCharacter* Player, float DeltaTime);
 	virtual void	ItemStop(APlayerCharacter* Player);
+	virtual void	ItemExpired(APlayerCharacter* Player);
 
 protected:
 	float	LifeTime=-1.0;

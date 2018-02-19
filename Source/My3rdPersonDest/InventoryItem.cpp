@@ -27,13 +27,19 @@ void UInventoryItem::ItemTick(APlayerCharacter * Player,float DeltaTime)
 		LifeTime -= DeltaTime;
 		if (LifeTime <= 0.0f)
 		{
-			Player->RemoveItem(this);
+			ItemExpired(Player);
 		}
 	}
 }
 
 void UInventoryItem::ItemStop(APlayerCharacter * Player)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Item Stopped, will destroy"));
 	this->ConditionalBeginDestroy();
-	UE_LOG(LogTemp, Warning, TEXT("Item Removed"));
+}
+
+void UInventoryItem::ItemExpired(APlayerCharacter * Player)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Item Expired, will remove"));
+	Player->RemoveItem(this);	//Remove from player Inventory
 }
