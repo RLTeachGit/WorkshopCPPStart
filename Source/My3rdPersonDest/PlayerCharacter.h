@@ -52,5 +52,8 @@ public:
     TArray<UInventoryItem*> InventoryArray;
     
     void    AddItem(UInventoryItem* InventoryItem);
-    
+	void    RemoveItem(UInventoryItem* InventoryItem);
+
+	float	ItemTickTimeout = 0.0f;
+
 };

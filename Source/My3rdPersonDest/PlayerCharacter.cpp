@@ -23,7 +23,19 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	ItemTickTimeout += DeltaTime;
+	if (ItemTickTimeout > 1.0f)
+	{
+		int	tItemCount = InventoryArray.Num();
+		if (tItemCount > 0) 
+		{
+			for (int tIndex = tItemCount - 1; tIndex >= 0; tIndex--)	//For all Items in inventory, backwards as it may remove items, causing arrayitems to ripple down
+			{
+				InventoryArray[tIndex]->ItemTick(this, ItemTickTimeout);		//Tick the item every second
+			}
+		}
+		ItemTickTimeout = 0.0f;
+	}
 }
 
 
@@ -33,17 +45,29 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActo
     // Other Actor is the actor that triggered the event. Check that is not ourself.
     if ( (OtherActor != nullptr ) && (OtherActor != this) && ( OtherComp != nullptr ) )
     {
-        APickup* tPickup=Cast<APickup>(OtherActor);
+        APickup* tPickup=Cast<APickup>(OtherActor);		//Check its a Pickup
         if(tPickup!=nullptr)
         {
-            tPickup->PickedUp(this);
+            tPickup->PickedUp(this);		//Tell the Pickup its been picked up
         }
     }
 }
 
+//Get Player to add new Pickup To array
 void APlayerCharacter::AddItem(UInventoryItem* InventoryItem)
 {
-    InventoryArray.Add(InventoryItem);
+	if (InventoryItem->ItemStart(this))	//If items starts OK, add it to Inventory
+	{
+		InventoryArray.Add(InventoryItem);
+	}
+}
+
+void APlayerCharacter::RemoveItem(UInventoryItem * InventoryItem)
+{
+	if (InventoryArray.RemoveSingle(InventoryItem) != 0)
+	{
+		InventoryItem->ItemStop(this);
+	}
 }
 
 

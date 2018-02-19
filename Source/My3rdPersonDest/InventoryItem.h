@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "PlayerCharacter.h"
 #include "InventoryItem.generated.h"
 
 /**
@@ -16,5 +17,12 @@ class MY3RDPERSONDEST_API UInventoryItem : public UObject
 
 public:
     virtual int GetID();
-	
+
+	virtual	bool	ItemStart(APlayerCharacter* Player);
+	virtual	void	ItemTick(APlayerCharacter* Player, float DeltaTime);
+	virtual void	ItemStop(APlayerCharacter* Player);
+
+protected:
+	float	LifeTime=-1.0;
+
 };

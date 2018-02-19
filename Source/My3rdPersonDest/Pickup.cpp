@@ -22,11 +22,12 @@ void    APickup::PickedUp(APlayerCharacter* Player)
 {
     if(InventoryItemSelection!=nullptr)
     {
-        UInventoryItem* tItem = NewObject<UInventoryItem>(Player,InventoryItemSelection);
+        UInventoryItem* tItem = NewObject<UInventoryItem>(Player,InventoryItemSelection);		//Make up the correct item for this pickup, based on what is specified
         if(tItem!=nullptr)
         {
-            UE_LOG(LogTemp, Warning, TEXT("ID %d"), tItem->GetID());
-            Player->AddItem(tItem);
+            UE_LOG(LogTemp, Warning, TEXT("ID %d"), tItem->GetID());	
+            Player->AddItem(tItem);	//Tell Player to add item to their inventory
+			this->ConditionalBeginDestroy();
         }
         else
         {
@@ -39,6 +40,5 @@ void    APickup::PickedUp(APlayerCharacter* Player)
 void APickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
