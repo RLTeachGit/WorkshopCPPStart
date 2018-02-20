@@ -29,5 +29,10 @@ public:
 	//Reference to UI for this level
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI)
 	UGameUIWidget*	GameUIWidgetRef;
+    
+private:
+    bool    bConnectUIWidgetToPlayer();
+
+    
 
 };

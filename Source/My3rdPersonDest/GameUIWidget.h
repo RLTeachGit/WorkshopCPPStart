@@ -8,6 +8,7 @@
 #include "Runtime/UMG/Public/UMGStyle.h"
 #include "Runtime/UMG/Public/Slate/SObjectWidget.h"
 #include "Runtime/UMG/Public/IUMGModule.h"
+#include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 #include "Runtime/UMG/Public/Blueprint/UserWidget.h"
 #include "GameUIWidget.generated.h"
 
@@ -21,6 +22,7 @@ class MY3RDPERSONDEST_API UGameUIWidget : public UUserWidget
 
 public:
 	void	UpdateUIScore(int Score);
+    UUserWidget*  AddInventoryItem(TSubclassOf<UUserWidget>& UIImageClass);
 
 protected:
 	UGameUIWidget(const FObjectInitializer& ObjectInitializer);
@@ -31,16 +33,17 @@ protected:
 
 	// Optionally override the tick event
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+    
+    
    
     UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category=UI)
     UTextBlock* ScoreWidget;
     
     UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category=UI)
-    UHorizontalBox* InventoryWidget;
-
+    UPanelWidget* InventoryWidget;
 
 	//Helper function to safely find a UI Element by Name and Type, will Log error if not found
-	//Needs to be defined in header as it is built at compile time
+	//As its a template function it needs to be defined in header as it is re-built at compile time
 	template	<class UIElement>
 	UIElement*	GetUIElementByName(const FName& tName)
 	{

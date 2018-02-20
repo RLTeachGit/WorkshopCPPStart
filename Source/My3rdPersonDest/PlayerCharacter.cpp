@@ -62,7 +62,8 @@ void APlayerCharacter::AddItem(TSubclassOf<UInventoryItem>  InventoryItemClass,T
 {
     UInventoryItem* tItem = NewObject<UInventoryItem>(this,InventoryItemClass);        //Make up the correct item for this pickup, based on what is specified
 
-    if(tItem!=nullptr) {
+    if(tItem!=nullptr)
+    {
         if (tItem->ItemStart(this,UIImageClass))    //If items starts OK, add it to Inventory
         {
             InventoryArray.Add(tItem);

@@ -26,7 +26,12 @@ public:
     //Image Widget to display in UI
     UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)
     TSubclassOf<UUserWidget> UIImageSelector;
+    
 
     UPROPERTY(VisibleAnywhere,BluePrintReadOnly,Category=InventoryItem)
 	float	LifeTime=-1.0;
+    
+protected:
+    UUserWidget*    UIImage;
+
 };

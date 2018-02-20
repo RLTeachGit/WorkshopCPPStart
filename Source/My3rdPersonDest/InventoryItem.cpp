@@ -15,6 +15,7 @@ bool UInventoryItem::ItemStart(APlayerCharacter * Player,TSubclassOf<UUserWidget
 {
     UIImageSelector=UIImageClass;   //What it will look like in UI
 	LifeTime = 3.0f;
+    UIImage=Player->PlayerUI->AddInventoryItem(UIImageClass);       //Add Image to UI
 	UE_LOG(LogTemp, Warning, TEXT("Item Started"));
 	return	true;
 }
@@ -35,6 +36,8 @@ void UInventoryItem::ItemTick(APlayerCharacter * Player,float DeltaTime)
 void UInventoryItem::ItemStop(APlayerCharacter * Player)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item Stopped, will destroy"));
+    UIImage->RemoveFromParent();
+    UIImage=nullptr;
 	this->ConditionalBeginDestroy();
 }
 
