@@ -5,7 +5,6 @@ class UInventoryItem;
 
 
 #include "InventoryItem.h"
-#include "PlayerCharacter.h"
 
 int UInventoryItem::GetID()
 {

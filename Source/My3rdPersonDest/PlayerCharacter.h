@@ -62,4 +62,8 @@ public:
 
 	float	ItemTickTimeout = 0.0f;
 
+private:
+	void	TickItems(float DeltaTime);
+	int		Score = 0;
+
 };

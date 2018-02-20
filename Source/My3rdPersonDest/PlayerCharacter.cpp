@@ -23,11 +23,16 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	TickItems(DeltaTime);
+}
+
+void	APlayerCharacter::TickItems(float DeltaTime)
+{
 	ItemTickTimeout += DeltaTime;
 	if (ItemTickTimeout > 1.0f)
 	{
 		int	tItemCount = InventoryArray.Num();
-		if (tItemCount > 0) 
+		if (tItemCount > 0)
 		{
 			for (int tIndex = tItemCount - 1; tIndex >= 0; tIndex--)	//For all Items in inventory, backwards as it may remove items, causing arrayitems to ripple down
 			{
@@ -37,7 +42,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 		ItemTickTimeout = 0.0f;
 	}
 }
-
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -88,6 +92,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::StartJump()
 {
 	Jump();
+	if (PlayerUI != nullptr)
+	{
+		Score += 100;
+		PlayerUI->UpdateUIScore(Score);
+	}
 }
 
 float   Clamp(const float Number,const float Low, const float High)
