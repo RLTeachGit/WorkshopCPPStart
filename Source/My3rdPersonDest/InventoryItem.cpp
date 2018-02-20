@@ -12,8 +12,9 @@ int UInventoryItem::GetID()
     return 10;
 }
 
-bool UInventoryItem::ItemStart(APlayerCharacter * Player)
+bool UInventoryItem::ItemStart(APlayerCharacter * Player,TSubclassOf<UUserWidget> UIImageClass)
 {
+    UIImageSelector=UIImageClass;   //What it will look like in UI
 	LifeTime = 3.0f;
 	UE_LOG(LogTemp, Warning, TEXT("Item Started"));
 	return	true;

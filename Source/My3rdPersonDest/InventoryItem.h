@@ -18,12 +18,15 @@ class MY3RDPERSONDEST_API UInventoryItem : public UObject
 public:
     virtual int GetID();
 
-	virtual	bool	ItemStart(APlayerCharacter* Player);
+	virtual	bool	ItemStart(APlayerCharacter* Player,TSubclassOf<UUserWidget> UIImageClass);
 	virtual	void	ItemTick(APlayerCharacter* Player, float DeltaTime);
 	virtual void	ItemStop(APlayerCharacter* Player);
 	virtual void	ItemExpired(APlayerCharacter* Player);
+    
+    //Image Widget to display in UI
+    UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)
+    TSubclassOf<UUserWidget> UIImageSelector;
 
-protected:
+    UPROPERTY(VisibleAnywhere,BluePrintReadOnly,Category=InventoryItem)
 	float	LifeTime=-1.0;
-
 };

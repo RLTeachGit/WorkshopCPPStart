@@ -10,7 +10,9 @@ class   APlayerCharacter;
 #include "GameFramework/Character.h"
 #include "Pickup.h"
 #include "InventoryItem.h"
+#include "GameUIWidget.h"
 #include "Components/CapsuleComponent.h"
+#include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -46,12 +48,16 @@ public:
     
     UFUNCTION()
     void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-    
+
+//UI
+    UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = UI)
+    UGameUIWidget* PlayerUI;
+
 //Inventory
     UPROPERTY(VisibleAnywhere, Instanced, BlueprintReadOnly, Category = Inventory)
     TArray<UInventoryItem*> InventoryArray;
     
-    void    AddItem(UInventoryItem* InventoryItem);
+    void    AddItem(TSubclassOf<UInventoryItem>  InventoryItemClass,TSubclassOf<UUserWidget> UIImageClass);
 	void    RemoveItem(UInventoryItem* InventoryItem);
 
 	float	ItemTickTimeout = 0.0f;

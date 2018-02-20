@@ -29,7 +29,10 @@ protected:
 	// Optionally override the tick event
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
    
-	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category=Test)
-	int	Test;
-	
+    UPROPERTY(VisibleAnywhere, BluePrintReadWrite, Category=UI)
+    UTextBlock* ScoreWidget;
+    
+    UPROPERTY(VisibleAnywhere, BluePrintReadWrite, Category=UI)
+    UHorizontalBox* InventoryWidget;
+
 };

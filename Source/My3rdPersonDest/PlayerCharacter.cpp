@@ -54,12 +54,16 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActo
 }
 
 //Get Player to add new Pickup To array
-void APlayerCharacter::AddItem(UInventoryItem* InventoryItem)
+void APlayerCharacter::AddItem(TSubclassOf<UInventoryItem>  InventoryItemClass,TSubclassOf<UUserWidget> UIImageClass)
 {
-	if (InventoryItem->ItemStart(this))	//If items starts OK, add it to Inventory
-	{
-		InventoryArray.Add(InventoryItem);
-	}
+    UInventoryItem* tItem = NewObject<UInventoryItem>(this,InventoryItemClass);        //Make up the correct item for this pickup, based on what is specified
+
+    if(tItem!=nullptr) {
+        if (tItem->ItemStart(this,UIImageClass))    //If items starts OK, add it to Inventory
+        {
+            InventoryArray.Add(tItem);
+        }
+    }
 }
 
 void APlayerCharacter::RemoveItem(UInventoryItem * InventoryItem)

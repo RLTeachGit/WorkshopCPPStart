@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InventoryItem.h"
-#include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 #include "PlayerCharacter.h"
 #include "Pickup.generated.h"
 
@@ -28,7 +27,12 @@ public:
     
     virtual void PickedUp(APlayerCharacter* Player);
 
-
+    //Pickup class which will implement functionality
     UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)
     TSubclassOf<UInventoryItem> InventoryItemSelection;
+
+    //Image Widget to display in UI
+    UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)
+    TSubclassOf<UUserWidget> UIImageSelector;
+
 };
