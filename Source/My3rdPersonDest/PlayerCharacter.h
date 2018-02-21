@@ -35,10 +35,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void	StartJump();
-	void	ForwardMove(float Speed);
-	void	TurnRight(float Speed);
-    void    CameraUp(float Speed);
+
+	//Called from PlayerController
+	void	PlayerJump();
+	void	PlayerMoveForward(float Speed);
+	void	PlayerTurnRight(float Speed);
+    void    PlayerCameraUp(float Speed);
     
     UFUNCTION(BlueprintImplementableEvent, Category = Camera)
     void    RotateCamera(float Angle);
