@@ -48,7 +48,20 @@ public:
     
     UFUNCTION()
     void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+    
+    
+//PlayerStats
+public:
+    UFUNCTION()
+    void    AddScore(int Value);
+    
+    UFUNCTION()
+    int    GetScore();
 
+private:
+    int     Score = 0;
+
+public:
 //UI
     UPROPERTY(VisibleAnywhere,BlueprintReadWrite, Category = UI)
     UGameUIWidget* PlayerUI;
@@ -64,6 +77,5 @@ public:
 
 private:
 	void	TickItems(float DeltaTime);
-	int		Score = 0;
 
 };

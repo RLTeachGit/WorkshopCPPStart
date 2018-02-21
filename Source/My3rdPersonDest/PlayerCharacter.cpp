@@ -17,6 +17,9 @@ void APlayerCharacter::BeginPlay()
     UCapsuleComponent *tCapsule = GetCapsuleComponent();
 
     tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
+
+    Score=0;
+    PlayerUI->UpdateUIScore(Score);
 }
 
 // Called every frame
@@ -93,12 +96,22 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::StartJump()
 {
 	Jump();
-	if (PlayerUI != nullptr)
-	{
-		Score += 100;
-		PlayerUI->UpdateUIScore(Score);
-	}
+    AddScore(100);
 }
+
+void APlayerCharacter::AddScore(int Value)
+{
+    Score += Value;
+    if(PlayerUI!=nullptr)
+    {
+        PlayerUI->UpdateUIScore(Score);
+    }
+}
+int APlayerCharacter::GetScore()
+{
+    return Score;
+}
+
 
 float   Clamp(const float Number,const float Low, const float High)
 {

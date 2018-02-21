@@ -16,7 +16,6 @@ class MY3RDPERSONDEST_API UInventoryItem : public UObject
 	GENERATED_BODY()
 
 public:
-    virtual int GetID();
 
 	virtual	bool	ItemStart(APlayerCharacter* Player,TSubclassOf<UUserWidget> UIImageClass);
 	virtual	void	ItemTick(APlayerCharacter* Player, float DeltaTime);
