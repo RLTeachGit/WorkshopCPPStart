@@ -2,10 +2,11 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InventoryItem.h"
-#include "PlayerCharacter.h"
+#include "PlayerControllerRL.h"
 #include "Pickup.generated.h"
 
 UCLASS()
@@ -25,7 +26,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
     
-    virtual void PickedUp(APlayerCharacter* Player);
+    virtual void PickedUp(APlayerControllerRL* Controller);
 
     //Pickup class which will implement functionality
     UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)

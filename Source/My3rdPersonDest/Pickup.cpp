@@ -15,14 +15,13 @@ APickup::APickup()
 void APickup::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
-void    APickup::PickedUp(APlayerCharacter* Player)
+void    APickup::PickedUp(APlayerControllerRL* Controller)
 {
     if(InventoryItemSelection!=nullptr)
     {
-        Player->AddItem(InventoryItemSelection,UIImageSelector);	//Tell Player to add item to their inventory
+        Controller->AddItem(InventoryItemSelection,UIImageSelector);	//Tell Player to add item to their inventory
         this->Destroy();
     }
 }

@@ -1,22 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-class APlayerCharacter;		//Forward declaration
-class UInventoryItem;
-
 
 #include "InventoryItem.h"
 
-bool UInventoryItem::ItemStart(APlayerCharacter * Player,TSubclassOf<UUserWidget> UIImageClass)
+bool UInventoryItem::ItemStart(APlayerControllerRL* Controller,TSubclassOf<UUserWidget> UIImageClass)
 {
     UIImageSelector=UIImageClass;   //What it will look like in UI
-	LifeTime = 3.0f;
-    UIImage=Player->PlayerUI->AddInventoryItem(UIImageClass);       //Add Image to UI
-    Player->AddScore(150);
+	LifeTime = FMath::RandRange(3.0f,10.0f);
+    UIImage=Controller->GameUIWidgetRef->AddInventoryItem(UIImageClass);       //Add Image to UI
+    Controller->AddScore(150);
 	UE_LOG(LogTemp, Warning, TEXT("Item Started"));
 	return	true;
 }
 
-void UInventoryItem::ItemTick(APlayerCharacter * Player,float DeltaTime)
+void UInventoryItem::ItemTick(APlayerControllerRL* Controller,float DeltaTime)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item Ticked"));
 	if (LifeTime > 0.0)
@@ -24,12 +21,12 @@ void UInventoryItem::ItemTick(APlayerCharacter * Player,float DeltaTime)
 		LifeTime -= DeltaTime;
 		if (LifeTime <= 0.0f)
 		{
-			ItemExpired(Player);
+			ItemExpired(Controller);
 		}
 	}
 }
 
-void UInventoryItem::ItemStop(APlayerCharacter * Player)
+void UInventoryItem::ItemStop(APlayerControllerRL* Controller)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item Stopped, will destroy"));
     UIImage->RemoveFromParent();
@@ -37,8 +34,8 @@ void UInventoryItem::ItemStop(APlayerCharacter * Player)
 	this->ConditionalBeginDestroy();
 }
 
-void UInventoryItem::ItemExpired(APlayerCharacter * Player)
+void UInventoryItem::ItemExpired(APlayerControllerRL* Controller)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item Expired, will remove"));
-	Player->RemoveItem(this);	//Remove from player Inventory
+	Controller->RemoveItem(this);	//Remove from player Inventory
 }

@@ -18,70 +18,27 @@ void APlayerCharacter::BeginPlay()
 
     tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
 
-    Score=0;
-    PlayerUI->UpdateUIScore(Score);
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	TickItems(DeltaTime);
-}
-
-void	APlayerCharacter::TickItems(float DeltaTime)
-{
-	ItemTickTimeout += DeltaTime;
-	if (ItemTickTimeout > 1.0f)
-	{
-		int	tItemCount = InventoryArray.Num();
-		if (tItemCount > 0)
-		{
-			for (int tIndex = tItemCount - 1; tIndex >= 0; tIndex--)	//For all Items in inventory, backwards as it may remove items, causing arrayitems to ripple down
-			{
-				InventoryArray[tIndex]->ItemTick(this, ItemTickTimeout);		//Tick the item every second
-			}
-		}
-		ItemTickTimeout = 0.0f;
-	}
 }
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-     UE_LOG(LogTemp, Warning, TEXT("Collision"));
     // Other Actor is the actor that triggered the event. Check that is not ourself.
     if ( (OtherActor != nullptr ) && (OtherActor != this) && ( OtherComp != nullptr ) )
     {
         APickup* tPickup=Cast<APickup>(OtherActor);		//Check its a Pickup
         if(tPickup!=nullptr)
         {
-            tPickup->PickedUp(this);		//Tell the Pickup its been picked up
+            auto    tController=Cast<APlayerControllerRL>(GetController());
+            tPickup->PickedUp(tController);		//Tell the Pickup its been picked up
         }
     }
 }
-
-//Get Player to add new Pickup To array
-void APlayerCharacter::AddItem(TSubclassOf<UInventoryItem>  InventoryItemClass,TSubclassOf<UUserWidget> UIImageClass)
-{
-    UInventoryItem* tItem = NewObject<UInventoryItem>(this,InventoryItemClass);        //Make up the correct item for this pickup, based on what is specified
-
-    if(tItem!=nullptr)
-    {
-        if (tItem->ItemStart(this,UIImageClass))    //If items starts OK, add it to Inventory
-        {
-            InventoryArray.Add(tItem);
-        }
-    }
-}
-
-void APlayerCharacter::RemoveItem(UInventoryItem * InventoryItem)
-{
-	if (InventoryArray.RemoveSingle(InventoryItem) != 0)
-	{
-		InventoryItem->ItemStop(this);
-	}
-}
-
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -92,21 +49,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::PlayerJump()
 {
 	Jump();
-    AddScore(100);
 }
 
-void APlayerCharacter::AddScore(int Value)
-{
-    Score += Value;
-    if(PlayerUI!=nullptr)
-    {
-        PlayerUI->UpdateUIScore(Score);
-    }
-}
-int APlayerCharacter::GetScore()
-{
-    return Score;
-}
+
 
 //Doh! No Clamp in C++ 11
 float   Clamp(const float Number,const float Low, const float High)

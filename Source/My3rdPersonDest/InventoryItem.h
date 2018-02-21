@@ -2,9 +2,14 @@
 
 #pragma once
 
+
+class APlayerControllerRL;
+class UInventoryItem;
+
+
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "PlayerCharacter.h"
+#include "PlayerControllerRL.h"
 #include "InventoryItem.generated.h"
 
 /**
@@ -17,10 +22,10 @@ class MY3RDPERSONDEST_API UInventoryItem : public UObject
 
 public:
 
-	virtual	bool	ItemStart(APlayerCharacter* Player,TSubclassOf<UUserWidget> UIImageClass);
-	virtual	void	ItemTick(APlayerCharacter* Player, float DeltaTime);
-	virtual void	ItemStop(APlayerCharacter* Player);
-	virtual void	ItemExpired(APlayerCharacter* Player);
+	virtual	bool	ItemStart(APlayerControllerRL* Controller,TSubclassOf<UUserWidget> UIImageClass);
+	virtual	void	ItemTick(APlayerControllerRL* Controller, float DeltaTime);
+	virtual void	ItemStop(APlayerControllerRL* Controller);
+	virtual void	ItemExpired(APlayerControllerRL* Controller);
     
     //Image Widget to display in UI
     UPROPERTY(EditAnywhere,BluePrintReadWrite,Category=InventoryItem)

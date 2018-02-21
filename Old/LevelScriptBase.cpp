@@ -11,7 +11,7 @@ void ALevelScriptBase::BeginPlay()
 
 bool    ALevelScriptBase::bConnectUIWidgetToPlayer()
 {
-    if (GameUIWidgetClass != nullptr)        //Use UP BP class set as default in Level wBP whoch inherits this
+    if (GameUIWidgetClass != nullptr)        //Use UP BP class set as default in Level BP which inherits this
     {
         //Use Class ref of UI BP which is set in Level Default
         GameUIWidgetRef = NewObject<UGameUIWidget>(this, GameUIWidgetClass);        //Create the UP from its Blueprint
