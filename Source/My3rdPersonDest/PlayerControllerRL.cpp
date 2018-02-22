@@ -79,6 +79,12 @@ APlayerCharacter * APlayerControllerRL::GetPlayerCharacter()
 	return Cast<APlayerCharacter>(GetPawn());
 }
 
+bool    APlayerControllerRL::IsPlayerDead()
+{
+    APlayerCharacter* tPC=GetPlayerCharacter();
+    return  ((tPC==nullptr) || tPC->DeathPending()); //uses || as a short circuit operator, if first condition true, second wont evaluate
+}
+
 
 bool    APlayerControllerRL::bConnectUIWidgetToPlayer()
 {
@@ -114,18 +120,21 @@ int APlayerControllerRL::GetScore()
 
 void    APlayerControllerRL::TickItems(float DeltaTime)
 {
-    ItemTickTimeout += DeltaTime;
-    if (ItemTickTimeout > 1.0f)
+    if(!IsPlayerDead())
     {
-        int    tItemCount = InventoryArray.Num();
-        if (tItemCount > 0)
+        ItemTickTimeout += DeltaTime;
+        if (ItemTickTimeout > 1.0f)
         {
-            for (int tIndex = tItemCount - 1; tIndex >= 0; tIndex--)    //For all Items in inventory, backwards as it may remove items, causing arrayitems to ripple down
+            int    tItemCount = InventoryArray.Num();
+            if (tItemCount > 0)
             {
-                InventoryArray[tIndex]->ItemTick(this, ItemTickTimeout);        //Tick the item every second
+                for (int tIndex = tItemCount - 1; tIndex >= 0; tIndex--)    //For all Items in inventory, backwards as it may remove items, causing arrayitems to ripple down
+                {
+                    InventoryArray[tIndex]->ItemTick(this, ItemTickTimeout);        //Tick the item every second
+                }
             }
+            ItemTickTimeout = 0.0f;
         }
-        ItemTickTimeout = 0.0f;
     }
 }
 

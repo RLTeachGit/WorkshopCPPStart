@@ -15,15 +15,15 @@ bool UInventoryItem::ItemStart(APlayerControllerRL* Controller,TSubclassOf<UUser
 
 void UInventoryItem::ItemTick(APlayerControllerRL* Controller,float DeltaTime)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Item Ticked"));
-	if (LifeTime > 0.0)
-	{
-		LifeTime -= DeltaTime;
-		if (LifeTime <= 0.0f)
-		{
-			ItemExpired(Controller);
-		}
-	}
+    UE_LOG(LogTemp, Warning, TEXT("Item Ticked"));
+    if (LifeTime > 0.0)
+    {
+        LifeTime -= DeltaTime;
+        if (LifeTime <= 0.0f)
+        {
+            ItemExpired(Controller);
+        }
+    }
 }
 
 void UInventoryItem::ItemStop(APlayerControllerRL* Controller)

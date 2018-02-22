@@ -32,6 +32,9 @@ public:
 	//Helper Function to Access my version of Character
 	UFUNCTION(BlueprintCallable)
 	APlayerCharacter*	GetPlayerCharacter();
+    
+    UFUNCTION(BlueprintCallable)
+    bool    IsPlayerDead();
 
 //UI
     //Set this in UI Blueprint Defaults

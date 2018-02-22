@@ -63,11 +63,16 @@ protected:
 	float	Health;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-	bool	bIsDead;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	bool	bIsInLava;
+    
+protected:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+    bool    bIsDeathPending;
+
+public:
+    UFUNCTION()
+    bool    DeathPending();
 
 private:
-	void	UpdateHealthUI(int Health);
+	void	UpdateHealthUI(int vHealth);
 };

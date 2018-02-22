@@ -19,8 +19,9 @@ void APlayerCharacter::BeginPlay()
     tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
 	tCapsule->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnEndOverlap);     //Register the EndOverlap event
 	Health = 100.0f;
-	bIsDead = false;
+	bIsDeathPending = false;
 	bIsInLava = false;
+    UpdateHealthUI(Health);
 
 }
 
@@ -28,7 +29,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bIsInLava && !bIsDead)
+	if (bIsInLava && !bIsDeathPending)
 	{
 		// Create a damage event  
 		TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
@@ -69,7 +70,7 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEven
 {
 	// Call the base class - this will tell us how much damage to apply  
 	const float tDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-	if (!bIsDead)
+	if (!bIsDeathPending)
 	{
 		if (tDamage > 0.f)
 		{
@@ -80,8 +81,7 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEven
 			{
 				UpdateHealthUI(0);
 				UE_LOG(LogTemp, Warning, TEXT("Dead"));
-				bIsDead = true;		//Set Dead Flag
-				Controller->UnPossess();
+				bIsDeathPending = true;		//Set Dead Flag
 				SetLifeSpan(3.0f);
 			}
 			else
@@ -93,12 +93,12 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEven
 	return tDamage;
 }
 
-void	APlayerCharacter::UpdateHealthUI(int Health)
+void	APlayerCharacter::UpdateHealthUI(int vHealth)
 {
 	auto tController = Cast<APlayerControllerRL>(Controller);
 	if (tController != nullptr && tController->GameUIWidgetRef != nullptr)
 	{
-		tController->GameUIWidgetRef->UpdateUIHealth(Health);
+		tController->GameUIWidgetRef->UpdateUIHealth(vHealth);
 	}
 }
 
@@ -110,7 +110,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::PlayerJump()
 {
-	Jump();
+    if (Controller != NULL && !DeathPending())
+    {
+        Jump();
+    }
 }
 
 
@@ -131,7 +134,7 @@ void    APlayerCharacter::PlayerCameraUp(float Speed)
 
 void APlayerCharacter::PlayerMoveForward(float Speed)
 {
-	if (Controller != NULL)
+	if (Controller != NULL && !DeathPending())
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation(); //Get characters current rotation
@@ -142,10 +145,15 @@ void APlayerCharacter::PlayerMoveForward(float Speed)
 
 void APlayerCharacter::PlayerTurnRight(float Speed)
 {
-	if (Controller != NULL)
+	if (Controller != NULL && !DeathPending())
 	{
 		// find out which way is right
 		AddControllerYawInput(Speed);
 	}
+}
+
+bool    APlayerCharacter::DeathPending()
+{
+    return bIsDeathPending;
 }
 
