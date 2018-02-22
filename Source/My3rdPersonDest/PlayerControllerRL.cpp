@@ -152,4 +152,8 @@ void APlayerControllerRL::RemoveItem(UInventoryItem * InventoryItem)
     }
 }
 
+void APlayerControllerRL::PlayerDied()
+{
+}
+
 

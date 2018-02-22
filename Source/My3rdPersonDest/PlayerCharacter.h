@@ -50,7 +50,24 @@ public:
     
     UFUNCTION()
     void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-    
-    
 
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
+    
+//Damage
+protected:
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	float	Health;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+	bool	bIsDead;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+	bool	bIsInLava;
+
+private:
+	void	UpdateHealthUI(int Health);
 };

@@ -22,7 +22,9 @@ class MY3RDPERSONDEST_API UGameUIWidget : public UUserWidget
 
 public:
 	void	UpdateUIScore(int Score);
-    UUserWidget*  AddInventoryItem(TSubclassOf<UUserWidget>& UIImageClass);
+	void	UpdateUIHealth(int Health);
+
+	UUserWidget*  AddInventoryItem(TSubclassOf<UUserWidget>& UIImageClass);
 
 protected:
 	UGameUIWidget(const FObjectInitializer& ObjectInitializer);
@@ -38,6 +40,10 @@ protected:
    
     UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category=UI)
     UTextBlock* ScoreWidget;
+
+	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = UI)
+	UTextBlock* HealthWidget;
+
     
     UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category=UI)
     UPanelWidget* InventoryWidget;

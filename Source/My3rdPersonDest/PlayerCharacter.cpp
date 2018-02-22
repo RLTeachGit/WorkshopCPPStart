@@ -17,6 +17,10 @@ void APlayerCharacter::BeginPlay()
     UCapsuleComponent *tCapsule = GetCapsuleComponent();
 
     tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
+	tCapsule->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnEndOverlap);     //Register the EndOverlap event
+	Health = 100.0f;
+	bIsDead = false;
+	bIsInLava = false;
 
 }
 
@@ -24,6 +28,15 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bIsInLava && !bIsDead)
+	{
+		// Create a damage event  
+		TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+		FDamageEvent DamageEvent(ValidDamageTypeClass);
+
+		const float DamageAmount = 1.0f;
+		TakeDamage(DamageAmount, DamageEvent, nullptr, this);
+	}
 }
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -36,8 +49,57 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActo
         {
             auto    tController=Cast<APlayerControllerRL>(GetController());
             tPickup->PickedUp(tController);		//Tell the Pickup its been picked up
-        }
+		}
+		else if(OtherActor->ActorHasTag(TEXT("Lava")))	//Stepped in Lava
+		{
+			bIsInLava = true;
+		}
     }
+}
+
+void APlayerCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor->ActorHasTag(TEXT("Lava")))	//Stepped out of Lava
+	{
+		bIsInLava = false;		//Out of Lava
+	}
+}
+
+float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	// Call the base class - this will tell us how much damage to apply  
+	const float tDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	if (!bIsDead)
+	{
+		if (tDamage > 0.f)
+		{
+			Health -= tDamage;
+			UE_LOG(LogTemp, Warning, TEXT("Taking Damage %.1f"), Health);
+			// If the damage depletes our health set our lifespan to zero - which will destroy the actor  
+			if (Health <= 0.f)
+			{
+				UpdateHealthUI(0);
+				UE_LOG(LogTemp, Warning, TEXT("Dead"));
+				bIsDead = true;		//Set Dead Flag
+				Controller->UnPossess();
+				SetLifeSpan(3.0f);
+			}
+			else
+			{
+				UpdateHealthUI(Health);
+			}
+		}
+	}
+	return tDamage;
+}
+
+void	APlayerCharacter::UpdateHealthUI(int Health)
+{
+	auto tController = Cast<APlayerControllerRL>(Controller);
+	if (tController != nullptr && tController->GameUIWidgetRef != nullptr)
+	{
+		tController->GameUIWidgetRef->UpdateUIHealth(Health);
+	}
 }
 
 // Called to bind functionality to input

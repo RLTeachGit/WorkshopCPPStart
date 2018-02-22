@@ -13,7 +13,9 @@ void UGameUIWidget::NativeConstruct()
 	// Call the Blueprint "Event Construct" node
 	Super::NativeConstruct();
     ScoreWidget = nullptr;		//Initalise Link to Score Widget, this will be found first time its needed
+	HealthWidget = nullptr;		//Initalise Link to Health Widget, this will be found first time its needed
 }
+
 
 
 UUserWidget*    UGameUIWidget::AddInventoryItem(TSubclassOf<UUserWidget>& UIImageClass)
@@ -50,6 +52,19 @@ void UGameUIWidget::UpdateUIScore(int Score)
 }
 
 
+void UGameUIWidget::UpdateUIHealth(int Health)
+{
+	const FName TextControlName = FName(TEXT("HealthPlaceHolder"));		//This must match name in the BP
+	if (HealthWidget == nullptr)		//If not yet set, then find it first timne and set a reference
+	{
+		HealthWidget = GetUIElementByName<UTextBlock>(TextControlName);	//Find Widget
+	}
+
+	if (HealthWidget != nullptr)	//Paranoia check, in case its been removed from BP
+	{
+		HealthWidget->SetText(FText::FromString(FString::Printf(TEXT("Health %d"), Health)));
+	}
+}
 
 void UGameUIWidget::NativeTick(const FGeometry & MyGeometry, float InDeltaTime)
 {

@@ -61,6 +61,8 @@ public:
     
     void    AddItem(TSubclassOf<UInventoryItem>  InventoryItemClass,TSubclassOf<UUserWidget> UIImageClass);
     void    RemoveItem(UInventoryItem* InventoryItem);
+
+	void	PlayerDied();
     
     float    ItemTickTimeout = 0.0f;
     
