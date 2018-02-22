@@ -14,31 +14,46 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    UCapsuleComponent *tCapsule = GetCapsuleComponent();
+
+    tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
+
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    // Other Actor is the actor that triggered the event. Check that is not ourself.
+    if ( (OtherActor != nullptr ) && (OtherActor != this) && ( OtherComp != nullptr ) )
+    {
+        APickup* tPickup=Cast<APickup>(OtherActor);		//Check its a Pickup
+        if(tPickup!=nullptr)
+        {
+            auto    tController=Cast<APlayerControllerRL>(GetController());
+            tPickup->PickedUp(tController);		//Tell the Pickup its been picked up
+        }
+    }
 }
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
-	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::ForwardMove);
-	PlayerInputComponent->BindAxis("LookRight", this, &APlayerCharacter::TurnRight);
-	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::CameraUp);
 }
 
-void APlayerCharacter::StartJump()
+void APlayerCharacter::PlayerJump()
 {
 	Jump();
 }
 
+
+
+//Doh! No Clamp in C++ 11
 float   Clamp(const float Number,const float Low, const float High)
 {
     if(Number>High) return High;
@@ -46,13 +61,13 @@ float   Clamp(const float Number,const float Low, const float High)
     return Number;
 }
 
-void    APlayerCharacter::CameraUp(float Speed)
+void    APlayerCharacter::PlayerCameraUp(float Speed)
 {
-    CamAngle= Clamp(CamAngle+Speed,-45.0f,45.0f);
+    CamAngle= Clamp(CamAngle+Speed,-45.0f,45.0f);		//Limit Camera pitch
     RotateCamera(CamAngle);
 }
 
-void APlayerCharacter::ForwardMove(float Speed)
+void APlayerCharacter::PlayerMoveForward(float Speed)
 {
 	if (Controller != NULL)
 	{
@@ -63,7 +78,7 @@ void APlayerCharacter::ForwardMove(float Speed)
 	}
 }
 
-void APlayerCharacter::TurnRight(float Speed)
+void APlayerCharacter::PlayerTurnRight(float Speed)
 {
 	if (Controller != NULL)
 	{

@@ -2,8 +2,17 @@
 
 #pragma once
 
+class   UInventoryItem;
+class   APlayerCharacter;
+
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Pickup.h"
+#include "InventoryItem.h"
+#include "GameUIWidget.h"
+#include "Components/CapsuleComponent.h"
+#include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -26,15 +35,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void	StartJump();
-	void	ForwardMove(float Speed);
-	void	TurnRight(float Speed);
-    void    CameraUp(float Speed);
+
+	//Called from PlayerController
+	void	PlayerJump();
+	void	PlayerMoveForward(float Speed);
+	void	PlayerTurnRight(float Speed);
+    void    PlayerCameraUp(float Speed);
     
-    UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
+    UFUNCTION(BlueprintImplementableEvent, Category = Camera)
     void    RotateCamera(float Angle);
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
     float     CamAngle=0.0f;
     
+    UFUNCTION()
+    void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
     
+    
+
 };
