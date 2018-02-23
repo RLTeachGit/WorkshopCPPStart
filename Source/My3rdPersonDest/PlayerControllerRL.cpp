@@ -8,6 +8,12 @@ void     APlayerControllerRL::BeginPlay()
     Score=0;
     bConnectUIWidgetToPlayer();
     GameUIWidgetRef->UpdateUIScore(Score);
+    GetWorld()->GetTimerManager().SetTimer(PlayerTimerHandle, this, &APlayerControllerRL::PlayerTimer, 1.0f, true);
+}
+
+void APlayerControllerRL::PlayerTimer()
+{
+    UE_LOG(LogTemp, Log, TEXT("Tick"));
 }
 
 void APlayerControllerRL::SetupInputComponent()
@@ -31,6 +37,12 @@ void APlayerControllerRL::SetupInputComponent()
 void    APlayerControllerRL::Tick(float DeltaTime)
 {
    TickItems(DeltaTime);
+}
+
+void    APlayerControllerRL::PlayerRespawnTimer()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Respawn"));
+    GetWorld()->GetAuthGameMode()->RestartPlayer(this);
 }
 
 
@@ -163,6 +175,7 @@ void APlayerControllerRL::RemoveItem(UInventoryItem * InventoryItem)
 
 void APlayerControllerRL::PlayerDied()
 {
+    GetWorld()->GetTimerManager().SetTimer(PlayerRespawnTimerHandle, this, &APlayerControllerRL::PlayerRespawnTimer, 5.0f, false);
 }
 
 

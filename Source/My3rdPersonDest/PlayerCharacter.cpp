@@ -76,13 +76,15 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEven
 		{
 			Health -= tDamage;
 			UE_LOG(LogTemp, Warning, TEXT("Taking Damage %.1f"), Health);
-			// If the damage depletes our health set our lifespan to zero - which will destroy the actor  
+			// If the damage depletes our health set our lifespan  - which will destroy the actor  
 			if (Health <= 0.f)
 			{
 				UpdateHealthUI(0);
 				UE_LOG(LogTemp, Warning, TEXT("Dead"));
 				bIsDeathPending = true;		//Set Dead Flag
 				SetLifeSpan(3.0f);
+                auto tController = Cast<APlayerControllerRL>(Controller);
+                tController->PlayerDied();
 			}
 			else
 			{

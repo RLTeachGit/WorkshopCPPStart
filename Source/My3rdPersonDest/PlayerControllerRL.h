@@ -71,5 +71,11 @@ public:
     
 private:
     void    TickItems(float DeltaTime);
-    
+    FTimerHandle PlayerTimerHandle;
+    void    PlayerTimer();
+
+    FTimerHandle PlayerRespawnTimerHandle;
+    void    PlayerRespawnTimer();
+
+
 };
