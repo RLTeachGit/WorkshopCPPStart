@@ -34,7 +34,7 @@ public:
 	APlayerCharacter*	GetPlayerCharacter();
     
     UFUNCTION(BlueprintCallable)
-    bool    IsPlayerDead();
+    bool    bIsPlayerDead();
 
 //UI
     //Set this in UI Blueprint Defaults
@@ -51,7 +51,7 @@ public:
     void    AddScore(int Value);
     
     UFUNCTION()
-    int    GetScore();
+    int     GetScore();
     
 private:
     int     Score = 0;
@@ -67,9 +67,9 @@ public:
 
 	void	PlayerDied();
     
-    float    ItemTickTimeout = 0.0f;
+    float   ItemTickTimeout = 0.0f;
     
 private:
     void    TickItems(float DeltaTime);
-
+    
 };

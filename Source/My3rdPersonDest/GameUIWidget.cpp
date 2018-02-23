@@ -6,6 +6,7 @@
 //UIWidget Constuctor
 UGameUIWidget::UGameUIWidget(const FObjectInitializer & ObjectInitializer) : Super(ObjectInitializer)
 {
+    UE_LOG(LogTemp, Warning, TEXT("UGameUIWidget::UGameUIWidget()"));
 }
 
 void UGameUIWidget::NativeConstruct()
@@ -14,6 +15,7 @@ void UGameUIWidget::NativeConstruct()
 	Super::NativeConstruct();
     ScoreWidget = nullptr;		//Initalise Link to Score Widget, this will be found first time its needed
 	HealthWidget = nullptr;		//Initalise Link to Health Widget, this will be found first time its needed
+    UE_LOG(LogTemp, Warning, TEXT("UGameUIWidget::NativeConstruct()"));
 }
 
 

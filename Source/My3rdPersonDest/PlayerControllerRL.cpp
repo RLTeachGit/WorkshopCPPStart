@@ -79,7 +79,7 @@ APlayerCharacter * APlayerControllerRL::GetPlayerCharacter()
 	return Cast<APlayerCharacter>(GetPawn());
 }
 
-bool    APlayerControllerRL::IsPlayerDead()
+bool    APlayerControllerRL::bIsPlayerDead()
 {
     APlayerCharacter* tPC=GetPlayerCharacter();
     return  ((tPC==nullptr) || tPC->DeathPending()); //uses || as a short circuit operator, if first condition true, second wont evaluate
@@ -97,7 +97,7 @@ bool    APlayerControllerRL::bConnectUIWidgetToPlayer()
             GameUIWidgetRef->AddToViewport(0);        //Show it
             GameUIWidgetRef->SetOwningPlayer(this);        //Make the Player Controller the owner of the UI
             UE_LOG(LogTemp, Warning, TEXT("Got UI linked to player"));    //Debug
-            return  true;
+            return  true;   //Success
         }
     }
     UE_LOG(LogTemp, Error, TEXT("bConnectUIWidgetToPlayer() failed"));
@@ -120,7 +120,7 @@ int APlayerControllerRL::GetScore()
 
 void    APlayerControllerRL::TickItems(float DeltaTime)
 {
-    if(!IsPlayerDead())
+    if(!bIsPlayerDead())
     {
         ItemTickTimeout += DeltaTime;
         if (ItemTickTimeout > 1.0f)
