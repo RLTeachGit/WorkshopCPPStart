@@ -7,8 +7,19 @@ APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	USkeletalMeshComponent* tMesh = GetMesh();
+	static ConstructorHelpers::FObjectFinder<UMaterial> tLoadedBlingMaterial(TEXT("Material'/Game/Materials/Gold.Gold'"));
 
+	if (tLoadedBlingMaterial.Succeeded())
+	{
+		BlingMaterial = UMaterialInstanceDynamic::Create(tLoadedBlingMaterial.Object, tMesh);
+		DefaultMaterial = tMesh->GetMaterial(0);		//Save Default Old Material
+	}
 }
+
+
+
+
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()

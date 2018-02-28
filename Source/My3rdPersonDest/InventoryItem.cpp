@@ -5,12 +5,18 @@
 
 bool UInventoryItem::ItemStart(APlayerControllerRL* Controller,TSubclassOf<UUserWidget> UIImageClass)
 {
-    UIImageSelector=UIImageClass;   //What it will look like in UI
-	LifeTime = FMath::RandRange(3.0f,10.0f);
-    UIImage=Controller->GameUIWidgetRef->AddInventoryItem(UIImageClass);       //Add Image to UI
-    Controller->AddScore(150);
 	UE_LOG(LogTemp, Warning, TEXT("Item Started"));
+	UIImageSelector=UIImageClass;   //What it will look like in UI
+    UIImage=Controller->GameUIWidgetRef->AddInventoryItem(UIImageClass);       //Add Image to UI
 	return	true;
+}
+
+void UInventoryItem::ItemStop(APlayerControllerRL* Controller)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Item Stopped, will destroy"));
+	UIImage->RemoveFromParent();
+	UIImage = nullptr;
+	this->ConditionalBeginDestroy();
 }
 
 void UInventoryItem::ItemTick(APlayerControllerRL* Controller,float DeltaTime)
@@ -26,13 +32,7 @@ void UInventoryItem::ItemTick(APlayerControllerRL* Controller,float DeltaTime)
     }
 }
 
-void UInventoryItem::ItemStop(APlayerControllerRL* Controller)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Item Stopped, will destroy"));
-    UIImage->RemoveFromParent();
-    UIImage=nullptr;
-	this->ConditionalBeginDestroy();
-}
+
 
 void UInventoryItem::ItemExpired(APlayerControllerRL* Controller)
 {

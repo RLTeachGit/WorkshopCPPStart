@@ -56,6 +56,8 @@ public:
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 
+	UMaterialInterface*	DefaultMaterial;
+	UMaterialInstanceDynamic* BlingMaterial;
     
 //Damage
 protected:

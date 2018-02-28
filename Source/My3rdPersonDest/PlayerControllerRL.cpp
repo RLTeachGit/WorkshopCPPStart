@@ -24,6 +24,7 @@ void APlayerControllerRL::SetupInputComponent()
 	if (InputComponent != nullptr)	//Check we have one
 	{
 		InputComponent->BindAction("Jump", IE_Pressed, this, &APlayerControllerRL::ControllerJump);
+		InputComponent->BindAction("Jump", IE_Released, this, &APlayerControllerRL::ControllerStopJump);
 		InputComponent->BindAxis("MoveForward", this, &APlayerControllerRL::ControllerMoveForward);
 		InputComponent->BindAxis("LookRight", this, &APlayerControllerRL::ControllerTurnRight);
 		InputComponent->BindAxis("LookUp", this, &APlayerControllerRL::ControllerLookUp);
@@ -82,6 +83,16 @@ void APlayerControllerRL::ControllerJump()
 	if (tPC != nullptr)
 	{
 		tPC->PlayerJump();
+	}
+}
+
+
+void APlayerControllerRL::ControllerStopJump()
+{
+	auto tPC = GetPlayerCharacter();
+	if (tPC != nullptr)
+	{
+		tPC->StopJumping();
 	}
 }
 

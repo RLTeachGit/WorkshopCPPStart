@@ -26,6 +26,7 @@ private:
 	void	ControllerTurnRight(float vSpeed);
 	void	ControllerLookUp(float vSpeed);
 	void	ControllerJump();
+	void	ControllerStopJump();
     bool    bConnectUIWidgetToPlayer();
     
 public:
