@@ -14,7 +14,7 @@ bool UMajorBling::ItemStart(APlayerControllerRL* Controller, TSubclassOf<UUserWi
 		USkeletalMeshComponent* tMesh = tPC->GetMesh();
 		tMesh->SetMaterial(0, tPC->BlingMaterial);
 	}
-	LifeTime = 10.0f;	//Last 10 seconds		
+	LifeTime = 10.0f;	//Last 10 seconds
 	return	true;
 }
 

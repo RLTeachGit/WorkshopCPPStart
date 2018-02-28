@@ -13,7 +13,6 @@ APlayerCharacter::APlayerCharacter()
 	if (tLoadedBlingMaterial.Succeeded())
 	{
 		BlingMaterial = UMaterialInstanceDynamic::Create(tLoadedBlingMaterial.Object, tMesh);
-		DefaultMaterial = tMesh->GetMaterial(0);		//Save Default Old Material
 	}
 }
 
@@ -33,6 +32,7 @@ void APlayerCharacter::BeginPlay()
 	bIsDeathPending = false;
 	bIsInLava = false;
     UpdateHealthUI(Health);
+    DefaultMaterial = GetMesh()->GetMaterial(0);        //Save Default Old Material
 
 }
 
