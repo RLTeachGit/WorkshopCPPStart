@@ -56,8 +56,7 @@ public:
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 
-	UMaterialInterface*	DefaultMaterial;
-	UMaterialInstanceDynamic* BlingMaterial;
+
     
 //Damage
 protected:
@@ -67,14 +66,21 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	bool	bIsInLava;
     
-protected:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-    bool    bIsDeathPending;
+private:
+    bool    bIsDeathPendingFlag;
 
 public:
-    UFUNCTION()
-    bool    DeathPending();
+    UFUNCTION(BlueprintCallable)
+    bool    IsDeathPending();
 
 private:
 	void	UpdateHealthUI(int vHealth);
+
+public:
+    UPROPERTY(EditAnywhere,BluePrintReadOnly, Category  = Looks)
+    UMaterial*  BlingMeOut;
+    
+    UMaterialInterface*         DefaultMaterial;
+    UMaterialInstanceDynamic*   BlingMaterial;
+    
 };

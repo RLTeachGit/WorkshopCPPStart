@@ -105,7 +105,7 @@ APlayerCharacter * APlayerControllerRL::GetPlayerCharacter()
 bool    APlayerControllerRL::bIsPlayerDead()
 {
     APlayerCharacter* tPC=GetPlayerCharacter();
-    return  ((tPC==nullptr) || tPC->DeathPending()); //uses || as a short circuit operator, if first condition true, second wont evaluate
+    return  ((tPC==nullptr) || tPC->IsDeathPending()); //uses || as a short circuit operator, if first condition true, second wont evaluate
 }
 
 

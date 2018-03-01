@@ -7,13 +7,16 @@ APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+/*
 	USkeletalMeshComponent* tMesh = GetMesh();
-	static ConstructorHelpers::FObjectFinder<UMaterial> tLoadedBlingMaterial(TEXT("Material'/Game/Materials/Gold.Gold'"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> tLoadedBlingMaterial(TEXT("Material'/Game/Materials/Gold.Gold'")); //This can only be called in constructor
 
 	if (tLoadedBlingMaterial.Succeeded())
 	{
-		BlingMaterial = UMaterialInstanceDynamic::Create(tLoadedBlingMaterial.Object, tMesh);
+		//BlingMaterial = UMaterialInstanceDynamic::Create(tLoadedBlingMaterial.Object, tMesh);
+        BlingMaterial = UMaterialInstanceDynamic::Create(BlingMeOut, tMesh);
 	}
+ */
 }
 
 
@@ -29,18 +32,19 @@ void APlayerCharacter::BeginPlay()
     tCapsule->OnComponentBeginOverlap.AddDynamic(this,&APlayerCharacter::OnBeginOverlap);
 	tCapsule->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnEndOverlap);     //Register the EndOverlap event
 	Health = 100.0f;
-	bIsDeathPending = false;
+	bIsDeathPendingFlag = false;
 	bIsInLava = false;
     UpdateHealthUI(Health);
-    DefaultMaterial = GetMesh()->GetMaterial(0);        //Save Default Old Material
-
+    USkeletalMeshComponent* tMesh = GetMesh();
+    DefaultMaterial = tMesh->GetMaterial(0);        //Save Default Old Material
+    BlingMaterial = UMaterialInstanceDynamic::Create(BlingMeOut, tMesh);
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bIsInLava && !bIsDeathPending)
+	if (bIsInLava && !bIsDeathPendingFlag)
 	{
 		// Create a damage event  
 		TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
@@ -81,7 +85,7 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEven
 {
 	// Call the base class - this will tell us how much damage to apply  
 	const float tDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-	if (!bIsDeathPending)
+	if (!bIsDeathPendingFlag)
 	{
 		if (tDamage > 0.f)
 		{
@@ -92,7 +96,7 @@ float APlayerCharacter::TakeDamage(float Damage, FDamageEvent const & DamageEven
 			{
 				UpdateHealthUI(0);
 				UE_LOG(LogTemp, Warning, TEXT("Dead"));
-				bIsDeathPending = true;		//Set Dead Flag
+				bIsDeathPendingFlag = true;		//Set Dead Flag
 				SetLifeSpan(3.0f);
                 auto tController = Cast<APlayerControllerRL>(Controller);
                 tController->PlayerDied();
@@ -123,7 +127,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::PlayerJump()
 {
-    if (Controller != NULL && !DeathPending())
+    if (Controller != NULL && !IsDeathPending())
     {
         Jump();
     }
@@ -147,7 +151,7 @@ void    APlayerCharacter::PlayerCameraUp(float Speed)
 
 void APlayerCharacter::PlayerMoveForward(float Speed)
 {
-	if (Controller != NULL && !DeathPending())
+	if (Controller != NULL && !IsDeathPending())
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation(); //Get characters current rotation
@@ -158,15 +162,15 @@ void APlayerCharacter::PlayerMoveForward(float Speed)
 
 void APlayerCharacter::PlayerTurnRight(float Speed)
 {
-	if (Controller != NULL && !DeathPending())
+	if (Controller != NULL && !IsDeathPending())
 	{
 		// find out which way is right
 		AddControllerYawInput(Speed);
 	}
 }
 
-bool    APlayerCharacter::DeathPending()
+bool    APlayerCharacter::IsDeathPending()
 {
-    return bIsDeathPending;
+    return bIsDeathPendingFlag;
 }
 

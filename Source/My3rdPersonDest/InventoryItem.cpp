@@ -3,6 +3,11 @@
 
 #include "InventoryItem.h"
 
+UInventoryItem::UInventoryItem()
+{
+    UE_LOG(LogTemp, Warning, TEXT("UInventoryItem::UInventoryItem()"));
+}
+
 bool UInventoryItem::ItemStart(APlayerControllerRL* Controller,TSubclassOf<UUserWidget> UIImageClass)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Item Started"));
